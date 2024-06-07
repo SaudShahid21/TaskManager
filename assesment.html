@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <style>
+        .completed{
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <h1>Task Manager</h1>
+    <input type="text" id="title" placeholder="Enter task title">
+    <input type="text" id="description" placeholder="Enter task description">
+    <button onclick="addTask()">Add Task</button>
+    <input type="text" id="filter" placeholder="Filter tasks">
+    <button onclick="filterTasks()">Filter</button>
+    <ul id="taskList"></ul>
+    <script>
+        function Task(title,description){
+            this.title=title;
+            this.description=description;
+            this.completed=false;
+        }
+        Task.prototype.markCompleted=function(){
+            this.completed=!this.completed;
+        };
+        let tasks=[]
+        function addTask(){
+            const titleInput=document.getElementById('title');
+            const descriptionInput=document.getElementById('description');
+            const title=titleInput.value.trim();
+            const description=descriptionInput.value.trim();
+            if(title==='')
+            {
+                alert('Please enter a title');
+                return;
+            }
+            const task={title,description,completed:false};
+            tasks.push(task);
+            renderTasks();
+            titleInput.value='';
+            descriptionInput.value='';
+
+        }
+        function toggleTaskCompletion(index){
+            tasks[index].completed=!tasks[index].completed;
+            renderTasks();
+        }
+        function filterTasks(){
+            const keyword=document.getElementById('filter').value.trim().toLowerCase();
+            const filteredTasks=tasks.filter(task=>task.title.toLowerCase().includes(keyword) || task.description.toLowerCase().includes(keyword));
+            renderTasks(filteredTasks);
+        }
+
+        function renderTasks(taskArray=tasks){
+            const taskList=document.getElementById('taskList');
+            taskList.innerHTML='';
+            taskArray.forEach((task,index)=>{
+                const li =document.createElement('li');
+                li.textContent=task.title;
+                if(task.completed){
+                    li.classList.add('completed');
+                }
+                const span=document.createElement('span');
+                span.textContent=task.description;
+                li.appendChild(span);
+                const toggleButton=document.createElement('button');
+                toggleButton.textContent=task.completed?'Undo':'Done';
+                toggleButton.onclick=()=> toggleTaskCompletion(index);
+                li.appendChild(toggleButton);
+                taskList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
