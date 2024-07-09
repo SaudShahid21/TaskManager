@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>String Manipulation App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <h1>String Manipulation App</h1>
+        <input type="text" id="inputString" placeholder="Enter a string">
+        <button id="reverseBtn">Reverse String</button>
+        <button id="uppercaseBtn">Uppercase String</button>
+        <button id="lowercaseBtn">Lowercase String</button>
+        <button id="capitalizeBtn">Capitalize String</button>
+        <p id="output"></p>
+    </div>
+    <script>
+        // String Library Module
+
+class StringLibrary {
+    reverse(str) {
+        return str.split('').reverse().join('');
+    }
+
+    toUpperCase(str) {
+        return str.toUpperCase();
+    }
+
+    toLowerCase(str) {
+        return str.toLowerCase();
+    }
+}
+
+// Prototype method to capitalize the first letter of each word
+StringLibrary.prototype.capitalize = function(str) {
+    return str.replace(/\b\w/g, char => char.toUpperCase());
+};
+
+let st= new StringLibrary();
+const reverseBtn = document.getElementById('reverseBtn');
+const uppercaseBtn = document.getElementById('uppercaseBtn');
+const lowercaseBtn = document.getElementById('lowercaseBtn');
+const capitalizeBtn = document.getElementById('capitalizeBtn');
+const inputString = document.getElementById('inputString');
+const output = document.getElementById('output');
+
+// Event Bubbling Example
+document.getElementById('app').addEventListener('click', (event) => {
+    if (event.target.tagName === 'BUTTON') {
+        handleButtonClick(event.target.id);
+    }
+});
+
+function handleButtonClick(buttonId) {
+    const input = inputString.value;
+
+    if (input) {
+        let result = '';
+        switch (buttonId) {
+            case 'reverseBtn':
+                result = st.reverse(input);
+                break;
+            case 'uppercaseBtn':
+                result = st.toUpperCase(input);
+                break;
+            case 'lowercaseBtn':
+                result = st.toLowerCase(input);
+                break;
+            case 'capitalizeBtn':
+                result = st.capitalize(input);
+                break;
+        }
+        output.textContent = `Result: ${result}`;
+    } else {
+        output.textContent = 'Please enter a string.';
+    }
+}
+    </script>
+</body>
+</html>
